@@ -1,5 +1,5 @@
 <?xml version='1.0'?>
-<project name='ADE' default='all' basedir='.'>
+<project name='phil192' default='all' basedir='.'>
 	<property name='build.sysclasspath' value='ignore'/>
 
 	<target name='all' depends='ga1' description='Build everything!'/>
