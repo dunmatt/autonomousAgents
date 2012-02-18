@@ -1,0 +1,53 @@
+<?xml version='1.0'?>
+<project name='ADE' default='all' basedir='.'>
+	<property name='build.sysclasspath' value='ignore'/>
+
+	<target name='all' depends='ga1' description='Build everything!'/>
+	
+	<target name='clean' description='Removes built up build byproducts.'>
+		<delete includeemptydirs='true'>
+			<fileset dir="." includes="**/*.class" defaultexcludes="false"/>
+		</delete>
+	</target>
+	
+	<!-- ================== -->
+	<!-- Group Assignment 1 -->
+	<!-- ================== -->
+	<path id='ga1.path'>
+		<pathelement path='ga1/'/>
+		<pathelement path='ga1/swuig1.jar'/>
+	</path>
+	<target name='ga1' description='Builds Group Assignment 1'>
+		<javac srcdir='ga1/' destdir='ga1/' debug='true' debuglevel='lines,vars,source'>
+			<classpath refid='ga1.path'/>
+		</javac>
+	</target>
+	<target name='run-ga1' depends='ga1' description='Run Group Assignment 1'>
+		<java fork='true' dir='ga1/' classname='com.grid.simulations.simworld.GraphicsRunner' classpathref='ga1.path' spawn='false'/>
+	</target>
+	<target name='nb-ga1' depends='ga1' if='netbeans.home'>
+		<netbeans-debug-launcher classname='com.grid.simulations.simworld.GraphicsRunner'
+														 classpath='ga1.path'
+														 project.name='phil192'
+		/>
+	</target>
+
+	<!-- =============== -->
+	<!-- Building Macros -->
+	<!-- =============== -->
+	<macrodef name='netbeans-debug-launcher'>
+		<attribute name='classname' default='NOT SET'/>
+		<attribute name='classpath' default='ga1.path'/>
+		<attribute name='project.name' default='NOT SET'/>
+		<sequential>
+			<nbjpdastart name='@{project.name}' addressproperty="jpda.address" transport='dt_socket'>
+				<classpath refid='@{classpath}'/>
+			</nbjpdastart>
+			<java fork='true' classname='@{classname}' classpathref='@{classpath}'>
+				<jvmarg value='-Xdebug'/>
+				<jvmarg value='-Xrunjdwp:transport=dt_socket,address=${jpda.address}'/> <!-- '$' here is not a typo -->
+			</java>
+		</sequential>
+	</macrodef>
+
+</project>

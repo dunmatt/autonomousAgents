@@ -1,0 +1,10 @@
+.ant-targets-build.xml
+menu_configurations
+*_configurations
+world.jar
+environment_rules.csv
+
+*.class
+
+ga1/*.csv
+recentIPs

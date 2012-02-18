@@ -1,0 +1,59 @@
+6
+Agent_A
+"agent_a"
+com.grid.simulations.simworld.worlds.collector.Agent_A
+basecolor=[51,255,51,255]
+showpath=true
+showdirection=true
+recordfieldnames=null
+displaysize=12
+displayshape=0
+polygonpoints=null
+hidedead=true
+//start of javascript
+function actAgent_A(agent, agentList){
+
+
+
+
+
+}//end of act function
+function senseAgent_A(agent, agentList){
+
+
+
+
+
+}//end of sense function
+//end of javascript
+endofrule
+6
+Agent_F
+"agent_f"
+com.grid.simulations.simworld.worlds.collector.Agent_F
+basecolor=[255,0,51,255]
+showpath=true
+showdirection=true
+recordfieldnames=null
+displaysize=12
+displayshape=1
+polygonpoints=null
+hidedead=false
+//start of javascript
+function actAgent_F(agent, agentList){
+
+
+
+
+
+}//end of act function
+function senseAgent_F(agent, agentList){
+
+
+
+
+
+}//end of sense function
+//end of javascript
+endofrule
+endoffile
