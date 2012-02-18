@@ -8,7 +8,7 @@ import com.grid.simulations.simworld.*;
 import com.grid.simulations.simworld.components.*;
 import com.grid.simulations.simworld.worlds.collector.*;
 import java.util.*;
-
+//
 public class TestAgent extends Agent_F {
     // add your local variables here
 
