@@ -18,7 +18,7 @@
 		<pathelement path='ga1/swuig1.jar'/>
 	</path>
 	<target name='ga1' description='Builds Group Assignment 1'>
-		<javac srcdir='ga1/' destdir='ga1/' debug='true' debuglevel='lines,vars,source'>
+		<javac srcdir='ga1/' includes='*.java' debug='true' debuglevel='lines,vars,source'>
 			<classpath refid='ga1.path'/>
 		</javac>
 	</target>
