@@ -1,18 +1,17 @@
-package ga1;
-
 import com.grid.simulations.simworld.worlds.collector.Agent_F;
+import com.grid.simulations.simworld.worlds.collector.Agent_F.Item;
 import java.util.ArrayList;
-import java.util.Hashtable;
 
 /**
  *
  * @author M@
  */
-public class Learner extends Agent_F {
+public class Learner implements AgentFHelper {
+  Agent_F parent = null;
   MentalMap map = new MentalMap();
 
-  public Learner(String thisID, double iX, double iY, long seed, Hashtable SchdulerObjectManagementList) {
-    super("learner" + thisID, iX, iY, seed, SchdulerObjectManagementList);
+  public Learner(Agent_F parent) {
+    this.parent = parent;
   }
 
   // this function will be called automatically by the environment when agents are too
@@ -36,7 +35,7 @@ public class Learner extends Agent_F {
   public void sense(ArrayList<Item> agents, ArrayList<Item> food) {
     map.addFood(food);
     if (!map.dialedIn() && !food.isEmpty()) {
-      turnleft();
+      parent.turnleft();
       map.calibrateSpin(food);
     }
     System.out.println(map.dialedIn());

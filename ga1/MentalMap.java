@@ -1,5 +1,3 @@
-package ga1;
-
 import com.grid.simulations.simworld.worlds.collector.Agent_F.Item;
 import java.util.ArrayList;
 import java.util.List;
