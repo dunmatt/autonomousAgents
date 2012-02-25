@@ -4,12 +4,11 @@
  * @author matthias scheutz
  *
  */
-import com.grid.simulations.simworld.*;
 import com.grid.simulations.simworld.components.*;
 import com.grid.simulations.simworld.worlds.collector.*;
 import java.util.*;
 
-public class TestAgent extends Agent_F {
+public final class TestAgent extends Agent_F {
 
   List<AgentFHelper> helpers = new ArrayList<AgentFHelper>();
   AgentFHelper chosenHelper = null;
@@ -20,12 +19,14 @@ public class TestAgent extends Agent_F {
   public TestAgent(String thisIDName, int thisIDNumber, double iX, double iY, long seed, Hashtable SchdulerObjectManagementList) {
     super((thisIDName.isEmpty() ? "testagent" : thisIDName),
             thisIDNumber, iX, iY, seed, SchdulerObjectManagementList);
+    init();
   }
 
   void init(){
-    if (!initialized) {
+    if (initialized) {
       return;
     }
+    helpers.add(new Learner(this));
     Random rand = new Random();
     int i = rand.nextInt(helpers.size());
     chosenHelper = helpers.get(i);

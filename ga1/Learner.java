@@ -1,6 +1,7 @@
 import com.grid.simulations.simworld.worlds.collector.Agent_F;
 import com.grid.simulations.simworld.worlds.collector.Agent_F.Item;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -29,21 +30,34 @@ public class Learner implements AgentFHelper {
     return true;
   }
 
+  boolean firstSense = true;
   // template sense function as descibed in the assignment
   // add your code for sensing here
   @Override
   public void sense(ArrayList<Item> agents, ArrayList<Item> food) {
-    map.addFood(food);
-    if (!map.dialedIn() && !food.isEmpty()) {
-      parent.turnleft();
+    for (Item i : food) {
+      System.out.print(i.getHeading()+" ");
+    }
+    System.out.println();
+    if (!firstSense && !map.dialedIn()) {
       map.calibrateSpin(food);
     }
+    map.addFood(food);
     System.out.println(map.dialedIn());
+    firstSense = false;
   }
 
   // template act function as descibed in the assignment
   // add your code for acting here (note that you can only perform one turn and one speed action at the same time
   @Override
   public void act() {
+    if (!map.dialedIn()) {
+      parent.slowdown();
+      parent.turnleft();
+      return;
+    }
+
+
+    map.trackMove(parent.getSpeed());
   }
 }
