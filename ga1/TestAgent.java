@@ -20,6 +20,8 @@ public class TestAgent extends Agent_F {
   public TestAgent(String thisIDName, int thisIDNumber, double iX, double iY, long seed, Hashtable SchdulerObjectManagementList) {
     super((thisIDName.isEmpty() ? "testagent" : thisIDName),
             thisIDNumber, iX, iY, seed, SchdulerObjectManagementList);
+    AgentFHelper nastyLump = new NastyLump(thisIDName, thisIDNumber, iX, iY, seed, SchdulerObjectManagementList);
+    helpers.add(nastyLump);
   }
 
   void init(){
