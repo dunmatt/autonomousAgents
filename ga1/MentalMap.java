@@ -1,9 +1,10 @@
 
 import com.grid.simulations.simworld.worlds.collector.Agent_F.Item;
-import java.util.AbstractSet;
+import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 /**
  *
@@ -17,20 +18,36 @@ public class MentalMap {
   double maxFoodY = Double.NEGATIVE_INFINITY;
   double furthestSeenFoodDistance = 0;
   double furthestSeenMobDistance = 0;
+  double furthestFightRange = 0;
+  double furthestEatRange = 5;
   double spinSpeed = 0;
   double lastSpeed = 0;
+  double fastestSeenSpeed = 1;
   Point currentPos = new Point();
   double currentAngle = Double.NaN;
-  AbstractSet<Point> foodLocations = new HashSet<Point>();
+  AbstractMap<Point, Item> foodLocations = new HashMap<Point, Item>();
   List<Point> lastStationaryLandmarksPolar = new ArrayList<Point>();
+  List<Item> lastMobs = null;
 
   public void addFood(List<Item> food) {
     lastStationaryLandmarksPolar.clear();
 
+    if (dialedIn()) {
+      ArrayList<Point> emptyPoints = new ArrayList<Point>();
+      for (Entry<Point, Item> e : foodLocations.entrySet()) {
+        if (e.getValue().getDistance() < furthestSeenFoodDistance) {
+          emptyPoints.add(e.getKey());
+        }
+      }
+      for (Point key : emptyPoints) {
+        foodLocations.remove(key);
+      }
+    }
+
     for (Item morsel : food) {
       Point loc = getPosition(morsel);
-      if (!foodLocations.contains(loc)) {
-        foodLocations.add(loc);
+      if (!foodLocations.containsKey(loc)) {
+        foodLocations.put(loc, morsel);
       }
 
       // start tracking the fertile parts of the environment
@@ -59,14 +76,45 @@ public class MentalMap {
     }
   }
 
+  public void setMobs(List<Item> agents) {
+    lastMobs = agents;
+  }
+
   public void trackMove(double speed) {
     lastSpeed = speed;
+    if (speed > fastestSeenSpeed) {
+      fastestSeenSpeed = speed;
+    }
     currentPos.x += speed * Math.cos(currentAngle);
     currentPos.y += speed * Math.sin(currentAngle);
   }
 
   public void trackSpin(boolean clockwise) {
     currentAngle += clockwise ? -spinSpeed : spinSpeed;
+  }
+
+  public void trackEat() {
+    double nearestFoodDistance = Double.POSITIVE_INFINITY;
+    for (Item morsel : foodLocations.values()) {
+      if (morsel.getDistance() < nearestFoodDistance) {
+        nearestFoodDistance = morsel.getDistance();
+      }
+    }
+    if (nearestFoodDistance > furthestEatRange) {
+      furthestEatRange = nearestFoodDistance;
+    }
+  }
+
+  public void trackFight() {
+    Item nearestMob = lastMobs.get(0);
+    for (Item mob : lastMobs) {
+      if (mob.getDistance() < nearestMob.getDistance()) {
+        nearestMob = mob;
+      }
+    }
+    if (nearestMob.getDistance() > furthestFightRange) {
+      furthestFightRange = nearestMob.getDistance();
+    }
   }
 
   public void calibrateSpin(List<Item> food) {
@@ -109,6 +157,38 @@ public class MentalMap {
     return currentPos.plus(dx, dy);
   }
 
+  public double itemETA(Item item) {
+    return (item.getHeading() - (item.getHeading() > 180 ? 180 : 0)) / spinSpeed + item.getDistance() / fastestSeenSpeed;
+  }
+
+  public NavigationFeeling whichWayToFood() {
+    double nearestVal = Double.POSITIVE_INFINITY;
+    Item nearestFoodLoc = null;
+    for (Item p : foodLocations.values()) {
+      double eta = itemETA(p);
+      if (eta < nearestVal) {
+        nearestVal = eta;
+        nearestFoodLoc = p;
+      }
+    }
+    if (nearestFoodLoc != null) {
+      double heading = nearestFoodLoc.getHeading();
+      double stoppingDistance = .25*nearestFoodLoc.getDistance();  // magic number here arbitrary, needs to be < 1
+      if (heading < 10 || heading > 350) {
+        return stoppingDistance < furthestEatRange && lastSpeed > 1 ? NavigationFeeling.STRAIT_AHEAD_CLOSE : NavigationFeeling.STRAIT_AHEAD;
+      } else if (heading < 90) {
+        return stoppingDistance < furthestEatRange && lastSpeed > 1 ? NavigationFeeling.RIGHT_AHEAD_CLOSE : NavigationFeeling.RIGHT_AHEAD;
+      } else if (heading < 180) {
+        return NavigationFeeling.RIGHT;
+      } else if (heading < 270) {
+        return NavigationFeeling.LEFT;
+      } else if (heading < 350) {
+        return stoppingDistance < furthestEatRange && lastSpeed > 1 ? NavigationFeeling.LEFT_AHEAD_CLOSE : NavigationFeeling.LEFT_AHEAD;
+      }
+    }
+    return NavigationFeeling.LOST;
+  }
+
   public class Point {
 
     public double x = 0;
@@ -147,9 +227,15 @@ public class MentalMap {
   }
 
   public enum NavigationFeeling {
+
+    LOST,
     LEFT,
     RIGHT,
     LEFT_AHEAD,
-    RIGHT_AHEAD
+    RIGHT_AHEAD,
+    STRAIT_AHEAD,
+    LEFT_AHEAD_CLOSE,
+    RIGHT_AHEAD_CLOSE,
+    STRAIT_AHEAD_CLOSE,
   }
 }
