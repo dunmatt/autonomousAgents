@@ -1,7 +1,6 @@
 import com.grid.simulations.simworld.worlds.collector.Agent_F;
 import com.grid.simulations.simworld.worlds.collector.Agent_F.Item;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -20,6 +19,7 @@ public class Learner implements AgentFHelper {
   // add your decision-making for fighting here
   @Override
   public boolean fight() {
+    map.trackFight();
     return false;
   }
 
@@ -27,6 +27,8 @@ public class Learner implements AgentFHelper {
   // add your decision-making for eating here
   @Override
   public boolean eat() {
+    map.trackEat();
+    System.out.println("EATING!");
     return true;
   }
 
@@ -35,15 +37,11 @@ public class Learner implements AgentFHelper {
   // add your code for sensing here
   @Override
   public void sense(ArrayList<Item> agents, ArrayList<Item> food) {
-    for (Item i : food) {
-      System.out.print(i.getHeading()+" ");
-    }
-    System.out.println();
     if (!firstSense && !map.dialedIn()) {
       map.calibrateSpin(food);
     }
     map.addFood(food);
-    System.out.println(map.dialedIn());
+    map.setMobs(agents);
     firstSense = false;
   }
 
@@ -57,7 +55,51 @@ public class Learner implements AgentFHelper {
       return;
     }
 
-
+    switch (map.whichWayToFood()) {
+      case LOST:
+        if (map.areaSeemsFamiliar()) {
+          parent.slowdown();
+        } else {
+          // TODO: go back to a familiar area
+        }
+      case LEFT:
+        parent.turnleft();
+        map.trackSpin(true);
+        parent.slowdown();
+        break;
+      case LEFT_AHEAD:
+        parent.turnleft();
+        map.trackSpin(true);
+        parent.speedup();
+        break;
+      case RIGHT:
+        parent.turnright();
+        map.trackSpin(false);
+        parent.slowdown();
+        break;
+      case RIGHT_AHEAD:
+        parent.turnright();
+        map.trackSpin(false);
+        parent.speedup();
+        break;
+      case STRAIT_AHEAD:
+        parent.speedup();
+        break;
+      case LEFT_AHEAD_CLOSE:
+        parent.turnleft();
+        map.trackSpin(true);
+        parent.slowdown();
+        break;
+      case RIGHT_AHEAD_CLOSE:
+        parent.turnright();
+        map.trackSpin(false);
+        parent.slowdown();
+        break;
+      case STRAIT_AHEAD_CLOSE:
+        parent.slowdown();
+        break;
+    }
+//    paren
     map.trackMove(parent.getSpeed());
   }
 }
