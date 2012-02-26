@@ -10,6 +10,8 @@ import java.util.*;
 
 public final class TestAgent extends Agent_F {
 
+  public static int counter = 0;
+
   List<AgentFHelper> helpers = new ArrayList<AgentFHelper>();
   AgentFHelper chosenHelper = null;
   boolean initialized = false;
@@ -19,8 +21,10 @@ public final class TestAgent extends Agent_F {
   public TestAgent(String thisIDName, int thisIDNumber, double iX, double iY, long seed, Hashtable SchdulerObjectManagementList) {
     super((thisIDName.isEmpty() ? "testagent" : thisIDName),
             thisIDNumber, iX, iY, seed, SchdulerObjectManagementList);
-    AgentFHelper nastyLump = new NastyLump(thisIDName, thisIDNumber, iX, iY, seed, SchdulerObjectManagementList);
+    AgentFHelper nastyLump = new NastyLump(this);
+    AgentFHelper learner = new Learner(this);
     helpers.add(nastyLump);
+    helpers.add(learner);
     init();
   }
 
@@ -28,10 +32,19 @@ public final class TestAgent extends Agent_F {
     if (initialized) {
       return;
     }
+    /*
     helpers.add(new Learner(this));
     Random rand = new Random();
     int i = rand.nextInt(helpers.size());
-    chosenHelper = helpers.get(i);
+    chosenHelper = helpers.get(i);*/
+
+    int numagents = helpers.size();
+    System.err.println("numagents = " + numagents);
+    chosenHelper = helpers.get(counter % numagents);
+    System.err.println("counter = " + counter);
+    System.err.println("class = " + chosenHelper.getClass().toString());
+    counter++;
+
     initialized = true;
   }
 

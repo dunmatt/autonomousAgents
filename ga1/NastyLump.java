@@ -8,20 +8,26 @@ import com.grid.simulations.simworld.*;
 import com.grid.simulations.simworld.components.*;
 import com.grid.simulations.simworld.worlds.collector.*;
 import java.util.*;
+import com.grid.simulations.simworld.worlds.collector.Agent_F.Item;
 
-public class NastyLump extends Agent_F implements AgentFHelper{
+public class NastyLump implements AgentFHelper{
 
   // add your local variables here
   private boolean initialized = false;
+  private Agent_F fRef;
 
   private Item closestFood; 
 
   // Do not change this line
+  /*
   public NastyLump(String thisIDName, int thisIDNumber, double iX, double iY, long seed, Hashtable SchdulerObjectManagementList) {
     super((thisIDName.isEmpty() ? "testagent" : thisIDName),
             thisIDNumber, iX, iY, seed, SchdulerObjectManagementList);
     System.err.println("(x,y) = (" + iX + "," + iY + ")" ); 
-  }
+  } */
+  public NastyLump(Agent_F ref) {
+    fRef = ref;
+  } 
 
   void init(){
     initialized = true;
@@ -31,7 +37,7 @@ public class NastyLump extends Agent_F implements AgentFHelper{
   // close to each other; needs to return true if the agent is fighting vs false if not
   // add your decision-making for fighting here
   public boolean fight() {
-    System.err.println("FIGHT! current agent energy = " + this.getEnergy() );
+    System.err.println("FIGHT! current agent energy = " + fRef.getEnergy() );
     return true;
   }
 
@@ -57,13 +63,13 @@ public class NastyLump extends Agent_F implements AgentFHelper{
   // template act function as descibed in the assignment
   // add your code for acting here (note that you can only perform one turn and one speed action at the same time
   public void act() {
-    System.err.println("current agent speed = " + this.getSpeed() + " ; current agent energy = " + this.getEnergy() );
-    if(this.getSpeed() >= 5) slowdown();
-    else if(this.getSpeed() < 5) speedup();
+    System.err.println("current agent speed = " + fRef.getSpeed() + " ; current agent energy = " + fRef.getEnergy() );
+    if(fRef.getSpeed() >= 5) fRef.slowdown();
+    else if(fRef.getSpeed() < 5) fRef.speedup();
 
     if(closestFood != null) {
-	if(closestFood.getHeading() > 0) turnright();
-    	else turnleft();
+	if(closestFood.getHeading() > 0) fRef.turnright();
+    	else fRef.turnleft();
     }
 
     
