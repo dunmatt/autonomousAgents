@@ -1,5 +1,8 @@
+
 import com.grid.simulations.simworld.worlds.collector.Agent_F.Item;
+import java.util.AbstractSet;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -15,19 +18,20 @@ public class MentalMap {
   double furthestSeenFoodDistance = 0;
   double furthestSeenMobDistance = 0;
   double spinSpeed = 0;
-
+  double lastSpeed = 0;
   Point currentPos = new Point();
   double currentAngle = Double.NaN;
-
-  List<Point> foodLocations = new ArrayList<Point>();
+  AbstractSet<Point> foodLocations = new HashSet<Point>();
   List<Point> lastStationaryLandmarksPolar = new ArrayList<Point>();
-  
+
   public void addFood(List<Item> food) {
     lastStationaryLandmarksPolar.clear();
 
     for (Item morsel : food) {
       Point loc = getPosition(morsel);
-      foodLocations.add(loc);
+      if (!foodLocations.contains(loc)) {
+        foodLocations.add(loc);
+      }
 
       // start tracking the fertile parts of the environment
       if (loc.x < minFoodX) {
@@ -56,6 +60,7 @@ public class MentalMap {
   }
 
   public void trackMove(double speed) {
+    lastSpeed = speed;
     currentPos.x += speed * Math.cos(currentAngle);
     currentPos.y += speed * Math.sin(currentAngle);
   }
@@ -65,14 +70,23 @@ public class MentalMap {
   }
 
   public void calibrateSpin(List<Item> food) {
-    for(Item morsel : food) {
-      for (Point formerPos : lastStationaryLandmarksPolar) {
-        if (morsel.getDistance() == formerPos.x) {  //NOTE: this will fail if two morsels are the same distance from the calibration point
-          spinSpeed = Math.abs(morsel.getHeading() - formerPos.y);
-          return;
-        }
+    if (food.isEmpty()
+            || food.size() != lastStationaryLandmarksPolar.size()) {
+      return;
+    }
+    Item closestMorsel = food.get(0);
+    for (Item morsel : food) {
+      if (morsel.getDistance() < closestMorsel.getDistance()) {
+        closestMorsel = morsel;
       }
     }
+    Point closestLandmark = lastStationaryLandmarksPolar.get(0);
+    for (Point formerPos : lastStationaryLandmarksPolar) {
+      if (formerPos.x < closestLandmark.x) {
+        closestLandmark = formerPos;
+      }
+    }
+    spinSpeed = Math.abs(closestMorsel.getHeading() - closestLandmark.y);
   }
 
   public boolean dialedIn() {
@@ -106,11 +120,36 @@ public class MentalMap {
       result.y = y + p.y;
       return result;
     }
+
     public Point plus(double dx, double dy) {
       Point result = new Point();
       result.x = x + dx;
       result.y = y + dy;
       return result;
     }
+
+    @Override
+    public boolean equals(Object o) {
+      if (o instanceof Point) {
+        Point p = (Point) o;
+        return x == p.x && y == p.y;
+      }
+      return false;
+    }
+
+    @Override
+    public int hashCode() {
+      int hash = 7;
+      hash = 97 * hash + (int) (Double.doubleToLongBits(this.x) ^ (Double.doubleToLongBits(this.x) >>> 32));
+      hash = 97 * hash + (int) (Double.doubleToLongBits(this.y) ^ (Double.doubleToLongBits(this.y) >>> 32));
+      return hash;
+    }
+  }
+
+  public enum NavigationFeeling {
+    LEFT,
+    RIGHT,
+    LEFT_AHEAD,
+    RIGHT_AHEAD
   }
 }
