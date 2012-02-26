@@ -19,6 +19,7 @@ public class Learner implements AgentFHelper {
   // add your decision-making for fighting here
   @Override
   public boolean fight() {
+    map.trackFight();
     return false;
   }
 
@@ -26,24 +27,79 @@ public class Learner implements AgentFHelper {
   // add your decision-making for eating here
   @Override
   public boolean eat() {
+    map.trackEat();
+    System.out.println("EATING!");
     return true;
   }
 
+  boolean firstSense = true;
   // template sense function as descibed in the assignment
   // add your code for sensing here
   @Override
   public void sense(ArrayList<Item> agents, ArrayList<Item> food) {
-    map.addFood(food);
-    if (!map.dialedIn() && !food.isEmpty()) {
-      parent.turnleft();
+    if (!firstSense && !map.dialedIn()) {
       map.calibrateSpin(food);
     }
-    System.out.println(map.dialedIn());
+    map.addFood(food);
+    map.setMobs(agents);
+    firstSense = false;
   }
 
   // template act function as descibed in the assignment
   // add your code for acting here (note that you can only perform one turn and one speed action at the same time
   @Override
   public void act() {
+    if (!map.dialedIn()) {
+      parent.slowdown();
+      parent.turnleft();
+      return;
+    }
+
+    switch (map.whichWayToFood()) {
+      case LOST:
+        if (map.areaSeemsFamiliar()) {
+          parent.slowdown();
+        } else {
+          // TODO: go back to a familiar area
+        }
+      case LEFT:
+        parent.turnleft();
+        map.trackSpin(true);
+        parent.slowdown();
+        break;
+      case LEFT_AHEAD:
+        parent.turnleft();
+        map.trackSpin(true);
+        parent.speedup();
+        break;
+      case RIGHT:
+        parent.turnright();
+        map.trackSpin(false);
+        parent.slowdown();
+        break;
+      case RIGHT_AHEAD:
+        parent.turnright();
+        map.trackSpin(false);
+        parent.speedup();
+        break;
+      case STRAIT_AHEAD:
+        parent.speedup();
+        break;
+      case LEFT_AHEAD_CLOSE:
+        parent.turnleft();
+        map.trackSpin(true);
+        parent.slowdown();
+        break;
+      case RIGHT_AHEAD_CLOSE:
+        parent.turnright();
+        map.trackSpin(false);
+        parent.slowdown();
+        break;
+      case STRAIT_AHEAD_CLOSE:
+        parent.slowdown();
+        break;
+    }
+//    paren
+    map.trackMove(parent.getSpeed());
   }
 }
