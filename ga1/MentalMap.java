@@ -201,21 +201,22 @@ public class MentalMap {
   }
 
   public NavigationFeeling whichWayToFamiliarTerritory() {
+    final double close = 15;
     double midX = (maxFoodX - minFoodX) / 2;
     double midY = (maxFoodY - minFoodY) / 2;
     double theta = Math.atan((midY - currentPos.y)/(midX - currentPos.x));
     double distance = Math.sqrt(Math.pow(maxFoodX - minFoodX, 2) + Math.pow(maxFoodY - minFoodY, 2));
     double dTheta = (360 + theta - currentAngle) % 360;
       if (dTheta < 10 || dTheta > 350) {
-        return distance < 20 && lastSpeed > 1 ? NavigationFeeling.STRAIT_AHEAD_CLOSE : NavigationFeeling.STRAIT_AHEAD;
+        return distance < close && lastSpeed > 1 ? NavigationFeeling.STRAIT_AHEAD_CLOSE : NavigationFeeling.STRAIT_AHEAD;
       } else if (dTheta < 90) {
-        return distance < 20 && lastSpeed > 1 ? NavigationFeeling.RIGHT_AHEAD_CLOSE : NavigationFeeling.RIGHT_AHEAD;
+        return distance < close && lastSpeed > 1 ? NavigationFeeling.RIGHT_AHEAD_CLOSE : NavigationFeeling.RIGHT_AHEAD;
       } else if (dTheta < 180) {
         return NavigationFeeling.RIGHT;
       } else if (dTheta < 270) {
         return NavigationFeeling.LEFT;
       } else if (dTheta < 350) {
-        return distance < 20 && lastSpeed > 1 ? NavigationFeeling.LEFT_AHEAD_CLOSE : NavigationFeeling.LEFT_AHEAD;
+        return distance < close && lastSpeed > 1 ? NavigationFeeling.LEFT_AHEAD_CLOSE : NavigationFeeling.LEFT_AHEAD;
       }
     return NavigationFeeling.LOST;
   }

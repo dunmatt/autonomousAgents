@@ -21,10 +21,9 @@ public final class TestAgent extends Agent_F {
   public TestAgent(String thisIDName, int thisIDNumber, double iX, double iY, long seed, Hashtable SchdulerObjectManagementList) {
     super((thisIDName.isEmpty() ? "testagent" : thisIDName),
             thisIDNumber, iX, iY, seed, SchdulerObjectManagementList);
-    AgentFHelper nastyLump = new NastyLump(this);
-    AgentFHelper learner = new Learner(this);
-    helpers.add(nastyLump);
-    helpers.add(learner);
+    helpers.add(new Learner(this));
+    helpers.add(new NastyLump(this));
+    helpers.add(new VectorSum(this));
     init();
   }
 
