@@ -63,12 +63,13 @@ public class NastyLump implements AgentFHelper{
   // template act function as descibed in the assignment
   // add your code for acting here (note that you can only perform one turn and one speed action at the same time
   public void act() {
-    System.err.println("current agent speed = " + fRef.getSpeed() + " ; current agent energy = " + fRef.getEnergy() );
+    System.err.println("current agent speed = " + fRef.getSpeed() + " ; current agent energy = " + fRef.getEnergy());
     if(fRef.getSpeed() >= 5) fRef.slowdown();
     else if(fRef.getSpeed() < 5) fRef.speedup();
 
     if(closestFood != null) {
-	if(closestFood.getHeading() > 0) fRef.turnright();
+	System.err.println("closest food heading = " + closestFood.getHeading());
+	if(closestFood.getHeading() > 0 && closestFood.getHeading() < 180) fRef.turnright();
     	else fRef.turnleft();
     }
 
