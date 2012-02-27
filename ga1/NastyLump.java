@@ -10,26 +10,25 @@ import com.grid.simulations.simworld.worlds.collector.*;
 import java.util.*;
 import com.grid.simulations.simworld.worlds.collector.Agent_F.Item;
 
-public class NastyLump implements AgentFHelper{
+public class NastyLump implements AgentFHelper {
 
   // add your local variables here
   private boolean initialized = false;
   private Agent_F fRef;
-
-  private Item closestFood; 
+  private Item closestFood;
 
   // Do not change this line
   /*
   public NastyLump(String thisIDName, int thisIDNumber, double iX, double iY, long seed, Hashtable SchdulerObjectManagementList) {
-    super((thisIDName.isEmpty() ? "testagent" : thisIDName),
-            thisIDNumber, iX, iY, seed, SchdulerObjectManagementList);
-    System.err.println("(x,y) = (" + iX + "," + iY + ")" ); 
+  super((thisIDName.isEmpty() ? "testagent" : thisIDName),
+  thisIDNumber, iX, iY, seed, SchdulerObjectManagementList);
+  System.err.println("(x,y) = (" + iX + "," + iY + ")" );
   } */
   public NastyLump(Agent_F ref) {
     fRef = ref;
-  } 
+  }
 
-  void init(){
+  void init() {
     initialized = true;
   }
 
@@ -49,27 +48,33 @@ public class NastyLump implements AgentFHelper{
   // template sense function as descibed in the assignment
   // add your code for sensing here
   public void sense(ArrayList<Item> agents, ArrayList<Item> food) {
-	double cfDist = Double.MAX_VALUE;
-	for(Item f: food) {
-		if(f.getDistance() < cfDist) {		
-			closestFood = f;
-			cfDist = f.getDistance();
-		}	
-	} 
+    double cfDist = Double.MAX_VALUE;
+    for (Item f : food) {
+      if (f.getDistance() < cfDist) {
+        closestFood = f;
+        cfDist = f.getDistance();
+      }
+    }
 
   }
 
   // template act function as descibed in the assignment
   // add your code for acting here (note that you can only perform one turn and one speed action at the same time
   public void act() {
-    if(fRef.getSpeed() >= 5) fRef.slowdown();
-    else if(fRef.getSpeed() < 5) fRef.speedup();
-
-    if(closestFood != null) {
-	if(closestFood.getHeading() > 0) fRef.turnright();
-    	else fRef.turnleft();
+    if (fRef.getSpeed() >= 5) {
+      fRef.slowdown();
+    } else if (fRef.getSpeed() < 5) {
+      fRef.speedup();
     }
 
-    
+    if (closestFood != null) {
+      if (closestFood.getHeading() > 0 && closestFood.getHeading() < 180) {
+        fRef.turnright();
+      } else {
+        fRef.turnleft();
+      }
+    }
+
+
   }
 }

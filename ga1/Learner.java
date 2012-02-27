@@ -56,13 +56,17 @@ public class Learner implements AgentFHelper {
       parent.turnleft();
       return;
     }
+    MentalMap.NavigationFeeling feeling = map.whichWayToFood();
+    if (feeling == MentalMap.NavigationFeeling.LOST) {
+      feeling = map.whichWayToFamiliarTerritory();
+    }
 
-    switch (map.whichWayToFood()) {
+    switch (feeling) {
       case LOST:
         if (map.areaSeemsFamiliar()) {
           parent.slowdown();
         } else {
-          System.err.println("OH NOES!  I NEED MY MOMMY!!!");
+          System.out.println("OH NOES!  I NEED MY MOMMY!!!");
           // TODO: go back to a familiar area
         }
       case LEFT:
