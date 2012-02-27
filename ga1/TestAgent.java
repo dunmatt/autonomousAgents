@@ -39,10 +39,7 @@ public final class TestAgent extends Agent_F {
     chosenHelper = helpers.get(i);*/
 
     int numagents = helpers.size();
-    System.err.println("numagents = " + numagents);
     chosenHelper = helpers.get(counter % numagents);
-    System.err.println("counter = " + counter);
-    System.err.println("class = " + chosenHelper.getClass().toString());
     counter++;
 
     initialized = true;

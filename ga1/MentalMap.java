@@ -12,6 +12,7 @@ import java.util.Map.Entry;
  */
 public class MentalMap {
 
+  final double SPATIAL_DISTANCE_WEIGHT = 2;
   double minFoodX = Double.POSITIVE_INFINITY;
   double maxFoodX = Double.NEGATIVE_INFINITY;
   double minFoodY = Double.POSITIVE_INFINITY;
@@ -21,7 +22,7 @@ public class MentalMap {
   double furthestFightRange = 0;
   double furthestEatRange = 5;
   double spinSpeed = 0;
-  double lastSpeed = 0;
+  double lastSpeed = 1;
   double fastestSeenSpeed = 1;
   Point currentPos = new Point();
   double currentAngle = Double.NaN;
@@ -90,7 +91,7 @@ public class MentalMap {
   }
 
   public void trackSpin(boolean clockwise) {
-    currentAngle += clockwise ? -spinSpeed : spinSpeed;
+    currentAngle += clockwise ? spinSpeed : -spinSpeed;
   }
 
   public void trackEat() {
@@ -158,7 +159,7 @@ public class MentalMap {
   }
 
   public double itemETA(Item item) {
-    return (item.getHeading() - (item.getHeading() > 180 ? 180 : 0)) / spinSpeed + item.getDistance() / fastestSeenSpeed;
+    return (item.getHeading() - (item.getHeading() > 180 ? 180 : 0)) / spinSpeed + (SPATIAL_DISTANCE_WEIGHT * item.getDistance() / fastestSeenSpeed);
   }
 
   public NavigationFeeling whichWayToFood() {
@@ -166,14 +167,16 @@ public class MentalMap {
     Item nearestFoodLoc = null;
     for (Item p : foodLocations.values()) {
       double eta = itemETA(p);
+//      System.err.println(eta);
       if (eta < nearestVal) {
         nearestVal = eta;
         nearestFoodLoc = p;
       }
     }
     if (nearestFoodLoc != null) {
-      double heading = nearestFoodLoc.getHeading();
-      double stoppingDistance = .25*nearestFoodLoc.getDistance();  // magic number here arbitrary, needs to be < 1
+      double heading = nearestFoodLoc.getHeading() % 360;
+      double stoppingDistance = 1.75 * nearestFoodLoc.getDistance() / Math.max(1, lastSpeed);  // magic number here arbitrary, needs to be < 1
+      System.out.println("Heading: " + heading + " Distance: " + stoppingDistance);
       if (heading < 10 || heading > 350) {
         return stoppingDistance < furthestEatRange && lastSpeed > 1 ? NavigationFeeling.STRAIT_AHEAD_CLOSE : NavigationFeeling.STRAIT_AHEAD;
       } else if (heading < 90) {

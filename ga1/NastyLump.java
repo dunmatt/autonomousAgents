@@ -37,7 +37,6 @@ public class NastyLump implements AgentFHelper{
   // close to each other; needs to return true if the agent is fighting vs false if not
   // add your decision-making for fighting here
   public boolean fight() {
-    System.err.println("FIGHT! current agent energy = " + fRef.getEnergy() );
     return true;
   }
 
@@ -63,7 +62,6 @@ public class NastyLump implements AgentFHelper{
   // template act function as descibed in the assignment
   // add your code for acting here (note that you can only perform one turn and one speed action at the same time
   public void act() {
-    System.err.println("current agent speed = " + fRef.getSpeed() + " ; current agent energy = " + fRef.getEnergy() );
     if(fRef.getSpeed() >= 5) fRef.slowdown();
     else if(fRef.getSpeed() < 5) fRef.speedup();
 

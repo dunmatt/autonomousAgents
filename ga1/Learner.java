@@ -1,3 +1,4 @@
+
 import com.grid.simulations.simworld.worlds.collector.Agent_F;
 import com.grid.simulations.simworld.worlds.collector.Agent_F.Item;
 import java.util.ArrayList;
@@ -7,6 +8,7 @@ import java.util.ArrayList;
  * @author M@
  */
 public class Learner implements AgentFHelper {
+
   Agent_F parent = null;
   MentalMap map = new MentalMap();
 
@@ -28,13 +30,13 @@ public class Learner implements AgentFHelper {
   @Override
   public boolean eat() {
     map.trackEat();
-    System.out.println("EATING!");
+    System.out.println("EATING");
     return true;
   }
-
   boolean firstSense = true;
   // template sense function as descibed in the assignment
   // add your code for sensing here
+
   @Override
   public void sense(ArrayList<Item> agents, ArrayList<Item> food) {
     if (!firstSense && !map.dialedIn()) {
@@ -60,6 +62,7 @@ public class Learner implements AgentFHelper {
         if (map.areaSeemsFamiliar()) {
           parent.slowdown();
         } else {
+          System.err.println("OH NOES!  I NEED MY MOMMY!!!");
           // TODO: go back to a familiar area
         }
       case LEFT:
@@ -88,15 +91,21 @@ public class Learner implements AgentFHelper {
       case LEFT_AHEAD_CLOSE:
         parent.turnleft();
         map.trackSpin(true);
-        parent.slowdown();
+        if (parent.getSpeed() > 2) {
+          parent.slowdown();
+        }
         break;
       case RIGHT_AHEAD_CLOSE:
         parent.turnright();
         map.trackSpin(false);
-        parent.slowdown();
+        if (parent.getSpeed() > 2) {
+          parent.slowdown();
+        }
         break;
       case STRAIT_AHEAD_CLOSE:
-        parent.slowdown();
+        if (parent.getSpeed() > 2) {
+          parent.slowdown();
+        }
         break;
     }
 //    paren
