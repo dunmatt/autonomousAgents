@@ -1,16 +1,20 @@
 
+import com.grid.simulations.simworld.worlds.collector.Agent_F;
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Random;
+
+
 /** Template for foraging agent
  *
  * @author matthias scheutz
  *
  */
-import com.grid.simulations.simworld.components.*;
-import com.grid.simulations.simworld.worlds.collector.*;
-import java.util.*;
 
 public final class TestAgent extends Agent_F {
 
-  public static int counter = 0;
+//  public static int counter = 0;
 
   List<AgentFHelper> helpers = new ArrayList<AgentFHelper>();
   AgentFHelper chosenHelper = null;
@@ -23,7 +27,7 @@ public final class TestAgent extends Agent_F {
             thisIDNumber, iX, iY, seed, SchdulerObjectManagementList);
     helpers.add(new Learner(this));
     helpers.add(new NastyLump(this));
-    helpers.add(new VectorSum(this));
+//    helpers.add(new VectorSum(this));
     init();
   }
 
@@ -31,15 +35,14 @@ public final class TestAgent extends Agent_F {
     if (initialized) {
       return;
     }
-    /*
-    helpers.add(new Learner(this));
+    
     Random rand = new Random();
     int i = rand.nextInt(helpers.size());
-    chosenHelper = helpers.get(i);*/
+    chosenHelper = helpers.get(i);//*/
 
-    int numagents = helpers.size();
-    chosenHelper = helpers.get(counter % numagents);
-    counter++;
+//    int numagents = helpers.size();
+//    chosenHelper = helpers.get(counter % numagents);
+//    counter++;
 
     initialized = true;
   }

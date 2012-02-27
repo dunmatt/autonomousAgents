@@ -30,7 +30,6 @@ public class Learner implements AgentFHelper {
   @Override
   public boolean eat() {
     map.trackEat();
-    System.out.println("EATING");
     return true;
   }
   boolean firstSense = true;
@@ -66,7 +65,7 @@ public class Learner implements AgentFHelper {
         if (map.areaSeemsFamiliar()) {
           parent.slowdown();
         } else {
-          System.out.println("OH NOES!  I NEED MY MOMMY!!!");
+//          System.out.println("OH NOES!  I NEED MY MOMMY!!!");
           // TODO: go back to a familiar area
         }
       case LEFT:
@@ -112,7 +111,6 @@ public class Learner implements AgentFHelper {
         }
         break;
     }
-//    paren
     map.trackMove(parent.getSpeed());
   }
 }

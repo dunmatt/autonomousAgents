@@ -168,7 +168,6 @@ public class MentalMap {
     Item nearestFoodLoc = null;
     for (Item p : foodLocations.values()) {
       double eta = itemETA(p);
-//      System.err.println(eta);
       if (eta < nearestVal) {
         nearestVal = eta;
         nearestFoodLoc = p;
@@ -178,7 +177,6 @@ public class MentalMap {
     if (nearestFoodLoc != null) {
       double heading = nearestFoodLoc.getHeading() % 360;
       double stoppingDistance = 1.25 * nearestFoodLoc.getDistance() / Math.max(1, lastSpeed);  // magic number here arbitrary, needs to be < 1
-      System.out.println("Heading: " + heading + " Distance: " + stoppingDistance);
       if (stoppingDistance == lastNearestFoodDistance && lastSpeed > 0) {
         return NavigationFeeling.LOST;
       } else {
