@@ -2,7 +2,7 @@
 <project name='phil192' default='all' basedir='.'>
 	<property name='build.sysclasspath' value='ignore'/>
 
-	<target name='all' depends='ga1' description='Build everything!'/>
+	<target name='all' depends='com,ga1' description='Build everything!'/>
 	
 	<target name='clean' description='Removes built up build byproducts.'>
 		<delete includeemptydirs='true'>
@@ -17,8 +17,13 @@
 		<pathelement path='ga1/'/>
 		<pathelement path='ga1/swuig1.jar'/>
 	</path>
+	<target name='com' depends='ga1'>
+		<javac srcdir='.' includes='com/**/*.java' debug='true' debuglevel='lines,vars,source'>
+			<classpath refid='ga1.path'/>
+		</javac>
+	</target>
 	<target name='ga1' description='Builds Group Assignment 1'>
-		<javac srcdir='ga1/' includes='*.java' debug='true' debuglevel='lines,vars,source'>
+		<javac srcdir='.' includes='ga1/*.java' debug='true' debuglevel='lines,vars,source'>
 			<classpath refid='ga1.path'/>
 		</javac>
 	</target>
@@ -28,6 +33,28 @@
 	<target name='nb-ga1' depends='ga1' if='netbeans.home'>
 		<netbeans-debug-launcher classname='com.grid.simulations.simworld.GraphicsRunner'
 														 classpath='ga1.path'
+														 project.name='phil192'
+		/>
+	</target>
+
+	<!-- ================== -->
+	<!-- Group Assignment 1 -->
+	<!-- ================== -->
+	<path id='ga2.path'>
+		<pathelement path='ga2/'/>
+		<pathelement path='ga2/swuig2.jar'/>
+	</path>
+	<target name='ga2' description='Builds Group Assignment 2'>
+		<javac srcdir='.' includes='ga2/*.java' debug='true' debuglevel='lines,vars,source'>
+			<classpath refid='ga2.path'/>
+		</javac>
+	</target>
+	<target name='run-ga2' depends='ga2' description='Run Group Assignment 2'>
+		<java fork='true' dir='ga2/' classname='com.grid.simulations.simworld.GraphicsRunner' classpathref='ga2.path' spawn='false'/>
+	</target>
+	<target name='nb-ga2' depends='ga2' if='netbeans.home'>
+		<netbeans-debug-launcher classname='com.grid.simulations.simworld.GraphicsRunner'
+														 classpath='ga2.path'
 														 project.name='phil192'
 		/>
 	</target>
