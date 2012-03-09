@@ -1,5 +1,3 @@
-import com.grid.simulations.simworld.*;
-import com.grid.simulations.simworld.components.*;
 import com.grid.simulations.simworld.worlds.collector.*;
 import java.util.*;
 
