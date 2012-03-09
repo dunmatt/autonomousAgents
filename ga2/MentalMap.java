@@ -29,6 +29,7 @@ public class MentalMap {
   AbstractMap<Point, Item> foodLocations = new HashMap<Point, Item>();
   List<Point> lastStationaryLandmarksPolar = new ArrayList<Point>();
   List<Item> lastMobs = null;
+	Item nearestMob = null;
 
   public void addFood(List<Item> food) {
     lastStationaryLandmarksPolar.clear();
@@ -79,6 +80,12 @@ public class MentalMap {
 
   public void setMobs(List<Item> agents) {
     lastMobs = agents;
+		nearestMob = agents.size() > 0 ? agents.get(0) : null;
+		for (Item mob : agents) {
+			if (mob.getDistance() < nearestMob.getDistance()) {
+				nearestMob = mob;
+			}
+		}
   }
 
   public void trackMove(double speed) {
