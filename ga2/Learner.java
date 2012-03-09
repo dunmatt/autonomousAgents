@@ -3,6 +3,7 @@ import com.grid.simulations.simworld.worlds.collector.Agent_F;
 import com.grid.simulations.simworld.worlds.collector.Agent_F.Item;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Random;
 
 /**
  *
@@ -11,6 +12,7 @@ import java.util.Hashtable;
 public class Learner extends Agent_F {
 	final double OBVIOUS_FAMILY_TRAIT = 0x0F00D000;
 	MentalMap map = new MentalMap();
+	Random rand = new Random();
 
 	public Learner() {
 		super();
@@ -43,7 +45,12 @@ public class Learner extends Agent_F {
 		if (oneOfUs(map.nearestMob)) {
 			return getEnergy() < getOtherEnergy(map.nearestMob);
 		}
-		return false;
+		else {
+			double p = (getEnergy()/500.0-1.0);
+                        p *= p; // get parabola
+			return rand.nextDouble() < p;
+		}
+
 	}
 
 	// this returns true depending on whether the agent wants to consume a food source
