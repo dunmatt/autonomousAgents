@@ -22,7 +22,6 @@ public class Learner extends Agent_F {
 	}
 
 	boolean oneOfUs(Item agent) {
-		System.out.println("One of us? " + Integer.toHexString(0x0FFFF000 & (int) agent.getAggression()));
 		return ((int)agent.getAggression() & 0x0FFFF000) == OBVIOUS_FAMILY_TRAIT;
 	}
 
