@@ -4,6 +4,8 @@ menu_configurations
 world.jar
 environment_rules.csv
 
+*/simworldfiles/*
+
 *.class
 nbproject/
 
