@@ -45,11 +45,12 @@ public class Learner extends Agent_F {
 		if (oneOfUs(map.nearestMob)) {
 			return getEnergy() < getOtherEnergy(map.nearestMob);
 		}
-		else {
+/*		else {
 			double p = (getEnergy()/500.0-1.0);
                         p *= p; // get parabola
 			return rand.nextDouble() < p;
-		}
+		}*/
+		return false;
 
 	}
 
