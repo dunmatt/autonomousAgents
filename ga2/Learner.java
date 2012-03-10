@@ -19,7 +19,7 @@ public class Learner extends Agent_F {
 	}
 
 	public Learner(String thisIDName, int thisIDNumber, double iX, double iY, long seed, Hashtable SchdulerObjectManagementList) {
-		super((thisIDName.isEmpty() ? "testagent" : thisIDName),
+		super((thisIDName.isEmpty() ? "learner" : thisIDName),
 					thisIDNumber, iX, iY, seed, SchdulerObjectManagementList);
 	}
 
@@ -69,7 +69,6 @@ public class Learner extends Agent_F {
 		map.addFood(food);
 		map.setMobs(agents);
 		firstSense = false;
-//		System.out.println(this.getEnergy());
 	}
 
 	// template act function as descibed in the assignment

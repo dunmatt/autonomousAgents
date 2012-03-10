@@ -54,7 +54,7 @@
 	</target>
 	<target name='nb-ga2' depends='ga2' if='netbeans.home'>
 		<netbeans-debug-launcher classname='com.grid.simulations.simworld.GraphicsRunner'
-														 classpathref='ga2.path'
+														 classpath='ga2.path'
 														 project.name='phil192'
 		/>
 	</target>
