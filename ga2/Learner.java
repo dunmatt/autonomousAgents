@@ -48,8 +48,6 @@ public class Learner extends Agent_F {
 			p *= p; // get parabola
 			return rand.nextDouble() < p;
 		}
-		return false;
-
 	}
 
 	// this returns true depending on whether the agent wants to consume a food source
