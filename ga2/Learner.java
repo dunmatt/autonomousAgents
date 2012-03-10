@@ -24,8 +24,7 @@ public class Learner extends Agent_F {
 	}
 
 	boolean oneOfUs(Item agent) {
-		System.out.println("One of us? " + Integer.toHexString(0x0FFFF000 & (int) agent.getAggression()));
-		return ((int)agent.getAggression() & 0x0FFFF000) == OBVIOUS_FAMILY_TRAIT;
+		return ((int) agent.getAggression() & 0x0FFFF000) == OBVIOUS_FAMILY_TRAIT;
 	}
 
 	int getOtherEnergy(Item agent) {
@@ -44,12 +43,11 @@ public class Learner extends Agent_F {
 		map.trackFight();
 		if (oneOfUs(map.nearestMob)) {
 			return getEnergy() < getOtherEnergy(map.nearestMob);
-		}
-/*		else {
-			double p = (getEnergy()/500.0-1.0);
-                        p *= p; // get parabola
+		} else {
+			double p = (getEnergy() / 500.0 - 1.0);
+			p *= p; // get parabola
 			return rand.nextDouble() < p;
-		}*/
+		}
 		return false;
 
 	}
@@ -86,7 +84,7 @@ public class Learner extends Agent_F {
 			return;
 		}
 		front();
-		
+
 		MentalMap.NavigationFeeling feeling = map.whichWayToFood();
 		if (feeling == MentalMap.NavigationFeeling.LOST) {
 			feeling = map.whichWayToFamiliarTerritory();
