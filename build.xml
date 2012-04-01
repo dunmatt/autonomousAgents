@@ -38,7 +38,7 @@
 	</target>
 
 	<!-- ================== -->
-	<!-- Group Assignment 1 -->
+	<!-- Group Assignment 2 -->
 	<!-- ================== -->
 	<path id='ga2.path'>
 		<pathelement path='ga2/'/>
@@ -55,6 +55,28 @@
 	<target name='nb-ga2' depends='ga2' if='netbeans.home'>
 		<netbeans-debug-launcher classname='com.grid.simulations.simworld.GraphicsRunner'
 														 classpath='ga2.path'
+														 project.name='phil192'
+		/>
+	</target>
+
+	<!-- ================== -->
+	<!-- Group Assignment 2 -->
+	<!-- ================== -->
+	<path id='semesterProject.path'>
+		<pathelement path='semesterProject/'/>
+		<pathelement path='semesterProject/swuig2.jar'/>
+	</path>
+	<target name='sp' description='Builds the semester project'>
+		<javac srcdir='.' includes='semesterProject/*.java' debug='true' debuglevel='lines,vars,source'>
+			<classpath refid='semesterProject.path'/>
+		</javac>
+	</target>
+	<target name='run-sp' depends='sp' description='Run the semester project'>
+		<java fork='true' dir='semesterProject/' classname='com.grid.simulations.simworld.GraphicsRunner' classpathref='semesterProject.path' spawn='false'/>
+	</target>
+	<target name='nb-sp' depends='sp' if='netbeans.home'>
+		<netbeans-debug-launcher classname='com.grid.simulations.simworld.GraphicsRunner'
+														 classpath='semesterProject.path'
 														 project.name='phil192'
 		/>
 	</target>
