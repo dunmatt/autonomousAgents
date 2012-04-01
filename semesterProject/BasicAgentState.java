@@ -30,7 +30,7 @@ public class BasicAgentState extends Agent2DState {
             double x,
 	    double y) {
         super(agentIDName,
-              agentIDNumber,
+              agentIDNumber,0,0,
                 x, y);
     }
 }

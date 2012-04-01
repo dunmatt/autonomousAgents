@@ -60,7 +60,7 @@
 	</target>
 
 	<!-- ================== -->
-	<!-- Group Assignment 2 -->
+	<!-- Group Assignment 3 -->
 	<!-- ================== -->
 	<path id='semesterProject.path'>
 		<pathelement path='semesterProject/'/>
