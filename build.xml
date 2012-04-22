@@ -64,7 +64,7 @@
 	<!-- ================== -->
 	<path id='semesterProject.path'>
 		<pathelement path='semesterProject/'/>
-		<pathelement path='semesterProject/swuig2.jar'/>
+		<pathelement path='semesterProject/swui.jar'/>
 	</path>
 	<target name='sp' description='Builds the semester project'>
 		<javac srcdir='.' includes='semesterProject/*.java' debug='true' debuglevel='lines,vars,source'>
